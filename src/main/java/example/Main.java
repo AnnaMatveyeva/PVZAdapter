@@ -91,58 +91,24 @@ interface WorkScheduleAdapterr {
 	String prepare(List<WorkSchedule> list);
 }
 
-class WorkScheduleAdapterImpll implements WorkScheduleAdapterr {
-
-	private boolean isComparedIntervals = false;
-
-	@Override
-	public String prepare(List<WorkSchedule> list) {
-		StringBuilder result = new StringBuilder();
-
-//		for (WorkSchedule ws : list){
-//			result.append(ws.day).append(":")
-//			.append(ws.workingHours.start)
-//			.append("-")
-//			.append(ws.workingHours.end)
-//			.append(",")
-//			.append(" перерыв");
-//			for(Interval time : ws.breaks){
-//				result.append(time.start).append("-").append(time.end);
-//			}
-//		}
-
-		return null;
-	}
-
+class WorkScheduleAdapterImpll {
 
 	public String adapter(List<WorkSchedule> list) {
 		StringBuilder result = new StringBuilder();
 		List<WorkSchedule> sorted = list.stream().sorted(Comparator.comparing(WorkSchedule::getDay).reversed()).collect(Collectors.toList());
 
 		List<Interval> intervals = new ArrayList<>();
-		for (WorkSchedule ws : list) {
-			if (!intervals.contains(ws.getWorkingHours())) {
-				intervals.add(ws.getWorkingHours());
-			}
-		}
+		list.stream().filter(workSchedule -> !intervals.contains(workSchedule.getWorkingHours())).forEach(workSchedule -> intervals.add(workSchedule.getWorkingHours()));
+
 		Map<Interval, List<WorkSchedule>> groupByWorkingHours = new HashMap<>();
-		for (Interval interval : intervals) {
-			groupByWorkingHours.put(interval, new ArrayList<>());
-		}
-		for (WorkSchedule ws : list) {
-			groupByWorkingHours.get(ws.getWorkingHours()).add(ws);
-		}
+		intervals.stream().forEach(interval -> groupByWorkingHours.put(interval, new ArrayList<>()));
 
-		System.out.println(groupByWorkingHours.values().size());
-
+		list.stream().forEach(workSchedule -> groupByWorkingHours.get(workSchedule.getWorkingHours()).add(workSchedule));
 
 		for (List<WorkSchedule> listSchedule : groupByWorkingHours.values()) {
-
-			List<WorkSchedule> byBreaks = new ArrayList<>();
 			List<WorkSchedule> sortedSchedule = listSchedule.stream().sorted(Comparator.comparing(WorkSchedule::getDay)).collect(Collectors.toList());
-
-
 			Map<List<Interval>, Set<WorkSchedule>> byIntervals = new HashMap<>();
+
 			for (int i = 0; i < sortedSchedule.size(); i++) {
 				for (int j = 0; j < sortedSchedule.size(); j++) {
 
@@ -163,58 +129,21 @@ class WorkScheduleAdapterImpll implements WorkScheduleAdapterr {
 				}
 			}
 
-			for (Set<WorkSchedule> workSchedules : byIntervals.values()) {
-
+			byIntervals.values().stream().forEach(workSchedules -> {
 				List<WorkSchedule> byBreaksSorted = workSchedules.stream().sorted(Comparator.comparing(WorkSchedule::getDay)).collect(Collectors.toList());
-				for (WorkSchedule workSchedule : byBreaksSorted) {
-					result.append(getWorkingDay(workSchedule))
-							.append(",");
-				}
+
+				byBreaksSorted.stream().forEach(workSchedule -> result.append(getWorkingDay(workSchedule))
+						.append(","));
 				result.deleteCharAt(result.length() - 1)
 						.append(": ")
-						.append(byBreaksSorted.get(0).workingHours.start).append("-").append(byBreaksSorted.get(0).workingHours.end).append(",");
+						.append(getWorkingHours(byBreaksSorted.get(0)));
 				result.append(getIntervals(byBreaksSorted.get(0)));
-			}
-
-
-//			Map<List<Interval>, List<WorkSchedule>> groupByIntervals = listSchedule.stream().sorted(Comparator.comparing(WorkSchedule::getDay).reversed()).collect(Collectors.groupingBy(WorkSchedule::getBreaks));
-//			groupByIntervals.values().stream().forEach(workSchedules -> workSchedules.stream().forEach(workSchedule -> System.out.println(workSchedule.day)));
-//
-//			for (List<WorkSchedule> listByIntervals : groupByIntervals.values()) {
-//				System.out.println(listByIntervals.size());
-//				List<WorkSchedule> listByIntervalsSorted = listByIntervals.stream().sorted(Comparator.comparing(WorkSchedule::getDay)).collect(Collectors.toList());
-//				System.out.println(listByIntervalsSorted.size());
-//
-//				for (WorkSchedule workSchedule : listByIntervalsSorted) {
-//					result.append(getWorkingDay(workSchedule))
-//							.append(",");
-//				}
-//				result.deleteCharAt(result.length() - 1)
-//						.append(": ")
-//						.append(listByIntervals.get(0).workingHours.start).append("-").append(listByIntervals.get(0).workingHours.end).append(",");
-//				result.append(getIntervals(listByIntervalsSorted.get(0)));
-//			}
+			});
 		}
 		result.append(findWeekend(list));
 
 		return result.toString();
 	}
-
-	public boolean isIntervalsSimilar(List<Interval> first, List<Interval> second) {
-		if (first.size() != second.size()) {
-			return false;
-		}
-		List<Interval> cp = new ArrayList<>(first);
-		for (Interval o : second) {
-			if (!cp.remove(o)) {
-				return false;
-			}
-		}
-
-
-		return cp.isEmpty();
-	}
-
 
 	public String getWorkingDay(WorkSchedule ws) {
 		StringBuilder result = new StringBuilder();
@@ -277,9 +206,6 @@ class WorkSchedule {
 		this.breaks = breaks;
 	}
 
-	public boolean isEqualsTime(WorkSchedule ws) {
-		return this.workingHours.equals(ws.workingHours) && this.breaks.equals(ws.breaks);
-	}
 
 	@Override
 	public boolean equals(Object obj) {
