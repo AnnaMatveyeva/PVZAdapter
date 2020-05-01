@@ -35,7 +35,7 @@ public class Main {
 		ws.workingHours.start = LocalTime.of(8, 0);
 		ws.workingHours.end = LocalTime.of(17, 0);
 		Interval intervalSu = new Interval();
-		intervalSu.start = LocalTime.of(13, 30);
+		intervalSu.start = LocalTime.of(13, 0);
 		intervalSu.end = LocalTime.of(14, 0);
 		ws.breaks = Arrays.asList(intervalSu);
 
@@ -66,8 +66,8 @@ public class Main {
 		ws1.day = DayOfWeek.MONDAY;
 		ws1.workingHours = new Interval();
 		Interval wsqI = new Interval();
-		wsqI.start = LocalTime.of(9, 0);
-		wsqI.end = LocalTime.of(18, 0);
+		wsqI.start = LocalTime.of(8, 0);
+		wsqI.end = LocalTime.of(17, 0);
 		ws1.workingHours = wsqI;
 		Interval interval = new Interval();
 		interval.start = LocalTime.of(13, 0);
@@ -157,13 +157,13 @@ class WorkScheduleAdapterImpll implements WorkScheduleAdapterr {
 					} else {
 						Set<WorkSchedule> listToMap = new HashSet<>();
 						listToMap.add(sortedSchedule.get(j));
-						if(byIntervals.containsKey(sortedSchedule.get(j).getBreaks()) && !byIntervals.get(sortedSchedule.get(j).getBreaks()).contains(sortedSchedule.get(j)))
+						if (byIntervals.containsKey(sortedSchedule.get(j).getBreaks()) && !byIntervals.get(sortedSchedule.get(j).getBreaks()).contains(sortedSchedule.get(j)))
 							byIntervals.put(sortedSchedule.get(j).getBreaks(), listToMap);
 					}
 				}
 			}
-			
-			for (Set<WorkSchedule> workSchedules : byIntervals.values()){
+
+			for (Set<WorkSchedule> workSchedules : byIntervals.values()) {
 
 				List<WorkSchedule> byBreaksSorted = workSchedules.stream().sorted(Comparator.comparing(WorkSchedule::getDay)).collect(Collectors.toList());
 				for (WorkSchedule workSchedule : byBreaksSorted) {
@@ -175,7 +175,6 @@ class WorkScheduleAdapterImpll implements WorkScheduleAdapterr {
 						.append(byBreaksSorted.get(0).workingHours.start).append("-").append(byBreaksSorted.get(0).workingHours.end).append(",");
 				result.append(getIntervals(byBreaksSorted.get(0)));
 			}
-
 
 
 //			Map<List<Interval>, List<WorkSchedule>> groupByIntervals = listSchedule.stream().sorted(Comparator.comparing(WorkSchedule::getDay).reversed()).collect(Collectors.groupingBy(WorkSchedule::getBreaks));
