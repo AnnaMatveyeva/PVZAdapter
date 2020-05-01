@@ -86,8 +86,6 @@ interface WorkScheduleAdapter {
 
 class WorkScheduleAdapterImpl implements WorkScheduleAdapter {
 
-	private boolean isComparedIntervals = false;
-
 	@Override
 	public String prepare(List<WorkSchedule> list) {
 		StringBuilder result = new StringBuilder();
