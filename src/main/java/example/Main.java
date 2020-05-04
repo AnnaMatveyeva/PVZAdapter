@@ -61,9 +61,13 @@ public class Main {
 		wsqI.end = LocalTime.of(18, 0);
 		ws1.workingHours = wsqI;
 		Interval interval = new Interval();
-		interval.start = LocalTime.of(13, 00);
+		interval.start = LocalTime.of(13, 0);
 		interval.end = LocalTime.of(14, 0);
-		ws1.breaks = Arrays.asList(interval);
+		Interval second = new Interval();
+		second.start = LocalTime.of(13, 30);
+		second.end = LocalTime.of(14, 0);
+
+		ws1.breaks = Arrays.asList(interval,second);
 
 
 		List<WorkSchedule> list = new ArrayList<>();
@@ -160,10 +164,8 @@ class WorkScheduleAdapterImpll {
 	}
 
 	public String getIntervals(WorkSchedule ws) {
-		StringBuilder result = new StringBuilder();
-		result.append("перерыв: ");
-		ws.breaks.stream().forEach(interval -> result.append(interval.start).append("-").append(interval.end).append(","));
-		return result.deleteCharAt(result.length() - 1).append("<br/>").toString();
+		String result = "перерыв: " + ws.breaks.stream().map(interval -> interval.getStart()+ "-" + interval.getEnd()).collect(Collectors.joining(","));
+		return result + "<br/>";
 	}
 
 	public String findWeekend(List<WorkSchedule> list) {
