@@ -19,12 +19,12 @@ public class WorkingAdapter {
 
 	public static void main(String[] args) {
 		WorkSchedule ws = new WorkSchedule();
-		ws.day = DayOfWeek.SATURDAY;
+		ws.day = DayOfWeek.WEDNESDAY;
 		ws.workingHours = new Interval();
 		ws.workingHours.start = LocalTime.of(9, 0);
 		ws.workingHours.end = LocalTime.of(18, 0);
 		Interval intervalSu = new Interval();
-		intervalSu.start = LocalTime.of(13, 0);
+		intervalSu.start = LocalTime.of(13, 30);
 		intervalSu.end = LocalTime.of(14, 0);
 		ws.breaks = Arrays.asList(intervalSu);
 
@@ -41,10 +41,10 @@ public class WorkingAdapter {
 
 
 		WorkSchedule ws2 = new WorkSchedule();
-		ws2.day = DayOfWeek.FRIDAY;
+		ws2.day = DayOfWeek.THURSDAY;
 		Interval wH = new Interval();
-		wH.start = LocalTime.of(8, 0);
-		wH.end = LocalTime.of(17, 0);
+		wH.start = LocalTime.of(9, 0);
+		wH.end = LocalTime.of(18, 0);
 		ws2.workingHours = wH;
 		Interval interval1 = new Interval();
 		interval1.start = LocalTime.of(13, 30);
@@ -55,8 +55,8 @@ public class WorkingAdapter {
 		ws1.day = DayOfWeek.MONDAY;
 		ws1.workingHours = new Interval();
 		Interval wsqI = new Interval();
-		wsqI.start = LocalTime.of(8, 0);
-		wsqI.end = LocalTime.of(17, 0);
+		wsqI.start = LocalTime.of(9, 0);
+		wsqI.end = LocalTime.of(18, 0);
 		ws1.workingHours = wsqI;
 		Interval interval = new Interval();
 		interval.start = LocalTime.of(13, 0);
@@ -64,7 +64,7 @@ public class WorkingAdapter {
 		Interval second = new Interval();
 		second.start = LocalTime.of(16, 0);
 		second.end = LocalTime.of(16, 10);
-		ws1.breaks = Arrays.asList(interval);
+		ws1.breaks = Arrays.asList(interval,second);
 
 
 		List<WorkSchedule> list = new ArrayList<>();

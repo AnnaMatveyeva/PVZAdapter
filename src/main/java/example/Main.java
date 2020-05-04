@@ -177,7 +177,7 @@ class WorkScheduleAdapterImpll {
 
 }
 
-class WorkSchedule implements Comparable<WorkSchedule> {
+class WorkSchedule  {
 
 	DayOfWeek day;
 	Interval workingHours;
@@ -208,24 +208,19 @@ class WorkSchedule implements Comparable<WorkSchedule> {
 	}
 
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
-			return true;
-		}
-		if (obj == null || obj.getClass() != this.getClass()) {
-			return false;
-		}
-		WorkSchedule ws = (WorkSchedule) obj;
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (obj == this) {
+//			return true;
+//		}
+//		if (obj == null || obj.getClass() != this.getClass()) {
+//			return false;
+//		}
+//		WorkSchedule ws = (WorkSchedule) obj;
+//
+//		return this.workingHours.equals(ws.workingHours) && this.breaks.equals(ws.breaks);
+//	}
 
-		return this.workingHours.equals(ws.workingHours) && this.breaks.equals(ws.breaks);
-	}
-
-	@Override
-	public int compareTo(WorkSchedule o) {
-
-		return this.getDay().compareTo(o.getDay());
-	}
 }
 
 class Interval {
